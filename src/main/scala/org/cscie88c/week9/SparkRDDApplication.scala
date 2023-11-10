@@ -44,8 +44,6 @@ object SparkRDDApplication {
 
   def readConfig(): SparkRDDConfig = {
 
-    // pureconfig.loadConfigOrThrow[SparkRDDConfig]
-
     val conf: SparkRDDConfig = ConfigSource.default
       .at("org.cscie88c.spark-rdd-application")
       .loadOrThrow[SparkRDDConfig]
@@ -61,29 +59,34 @@ object SparkRDDApplication {
 
   def lineToTransactions(lines: RDD[String]): RDD[CustomerTransaction] = {
 
-    lines.collect {
+    val filteredLines = lines.filter(_ != "customer_id,trans_date,tran_amount")
+
+    filteredLines.collect {
+
       case line if !line.isEmpty =>
         val parts = line.split(",")
 
-        val datePattern = "\\d{2}-[a-zA-Z]{3}-\\d{2}".r
-        parts(1) match {
-          case datePattern(_) =>
-            CustomerTransaction(parts(0), parts(1), parts(2).toDouble)
+        val date = parts(1)
+        val datePattern = """(\d{2})-([a-zA-Z]{3})-(\d{2})""".r
+
+        date match {
+          case datePattern(_, _, _) =>
+            CustomerTransaction(parts(0), date, parts(2).toDouble)
         }
     }
+
   }
 
   def transactionsAmountsByYear(
       transactions: RDD[CustomerTransaction]
   ): RDD[(String, Double)] = {
+
     transactions
       .map { transaction =>
         val year = transaction.transactionDate.split("-")(2)
         (year, transaction.transactionAmount)
       }
-      .asInstanceOf[PairRDDFunctions[String, Double]]
       .reduceByKey(_ + _)
-
   }
 
   def printTransactionsAmountsByYear(
@@ -92,7 +95,7 @@ object SparkRDDApplication {
     val results = transactions.collect()
 
     println("Transactions amounts by year:")
-    
+
     results.foreach { case (year, amount) =>
       println(s"Year $year: Sum Transactions: $amount")
     }
