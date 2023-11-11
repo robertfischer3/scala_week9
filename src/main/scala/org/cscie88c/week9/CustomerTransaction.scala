@@ -3,15 +3,15 @@ package org.cscie88c.week9
 import scala.util.{Try}
 
 final case class RawTransaction(
-  customer_id: String,
-  trans_date: String,
-  tran_amount: Double
+    customer_id: String,
+    trans_date: String,
+    tran_amount: Double
 )
 
 final case class CustomerTransaction(
-  customerId: String,
-  transactionDate: String,
-  transactionAmount: Double
+    customerId: String,
+    transactionDate: String,
+    transactionAmount: Double
 ) {
   def transactionYear: String = {
     transactionDate.split("-")(2)
@@ -36,5 +36,6 @@ object CustomerTransaction {
     CustomerTransaction(
       customerId = raw.customer_id,
       transactionDate = raw.trans_date,
-      transactionAmount = raw.tran_amount)
+      transactionAmount = raw.tran_amount
+    )
 }

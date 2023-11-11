@@ -1,10 +1,7 @@
 package org.cscie88c.week9
 
 import org.apache.spark.sql.SparkSession
-import com.typesafe.scalalogging.{LazyLogging}
-import org.cscie88c.config.{ConfigUtils}
 import org.cscie88c.utils.{SparkUtils}
-import org.apache.spark.rdd.PairRDDFunctions
 import org.apache.spark.rdd.{RDD}
 import pureconfig.generic.auto._
 import pureconfig._

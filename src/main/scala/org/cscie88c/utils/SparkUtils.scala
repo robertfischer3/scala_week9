@@ -3,8 +3,11 @@ package org.cscie88c.utils
 import org.apache.spark.sql.SparkSession
 
 object SparkUtils {
-  
-  def sparkSession(appName: String = "spark-app", masterURL: String = "local[*]"): SparkSession = {
+
+  def sparkSession(
+      appName: String = "spark-app",
+      masterURL: String = "local[*]"
+  ): SparkSession = {
     lazy val spark = SparkSession
       .builder()
       .appName(appName)

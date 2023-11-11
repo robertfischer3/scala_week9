@@ -1,11 +1,7 @@
 package org.cscie88c.week9
 
-import org.apache.spark.sql.SparkSession
-import com.typesafe.scalalogging.{LazyLogging}
-import org.cscie88c.config.{ConfigUtils}
 import org.cscie88c.utils.{SparkUtils}
-import org.apache.spark.sql.{SparkSession, Dataset, Encoder, Encoders}
-import org.apache.spark.sql.expressions.Aggregator
+import org.apache.spark.sql.{SparkSession, Dataset}
 
 import pureconfig.generic.auto._
 import pureconfig._
@@ -85,10 +81,10 @@ object SparkDSApplication {
   }
 
   def printTransactionTotalsByCategory(ds: Dataset[(String, Double)]): Unit = {
-    
+
     // Collect the dataset to the driver node as an Array
     val categoryTotals = ds.collect()
-    
+
     println("Transaction totals by category:")
 
     // Iterate through the array and print each category and its total

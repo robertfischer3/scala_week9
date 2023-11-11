@@ -1,13 +1,10 @@
 package org.cscie88c.week9
 
 import org.apache.spark.sql.SparkSession
-import com.typesafe.scalalogging.{LazyLogging}
-import org.cscie88c.config.{ConfigUtils}
 import org.cscie88c.utils.{SparkUtils}
-import org.apache.spark.sql.{Dataset, DataFrame, Row}
+import org.apache.spark.sql.DataFrame
 import pureconfig.generic.auto._
 import pureconfig._
-import org.apache.spark.sql.functions.{when}
 import org.apache.spark.sql.functions.{col, when}
 
 // run with: sbt "runMain org.cscie88c.week9.SparkSQLApplication"

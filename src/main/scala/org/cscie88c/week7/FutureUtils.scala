@@ -1,13 +1,10 @@
 package org.cscie88c.week7
 
 import scala.concurrent.{Future}
-import scala.util.{Try, Success, Failure}
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Random
-import scala.collection.parallel.CollectionConverters._
 
 object FutureUtils {
-  
+
   val rnd = new Random()
 
   def creditScoreAPI(applicantId: Int): Future[Int] = ???
