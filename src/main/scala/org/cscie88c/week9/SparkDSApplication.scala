@@ -64,27 +64,32 @@ object SparkDSApplication {
   ): Dataset[(String, Double)] = {
     import spark.implicits._
 
-    val sumAggregator = new Aggregator[CustomerTransaction, Double, Double] {
-      def zero: Double = 0.0
-      def reduce(b: Double, a: CustomerTransaction): Double =
-        b + a.transactionAmount
-      def merge(b1: Double, b2: Double): Double = b1 + b2
-      def finish(reduction: Double): Double = reduction
-      override def bufferEncoder: Encoder[Double] = Encoders.scalaDouble
-      override def outputEncoder: Encoder[Double] = Encoders.scalaDouble
-    }.toColumn
-
-    // Group by category and calculate total
-    val result = transactions
+    // Group by category
+    val grouped = transactions
       .groupByKey(t => if (t.transactionAmount > 80) "High" else "Standard")
-      .agg(sumAggregator)
+
+    // Use reduceGroups to sum the transaction amounts
+    val result = grouped
+      .reduceGroups((t1, t2) =>
+        CustomerTransaction(
+          t1.customerId,
+          t1.transactionDate,
+          t1.transactionAmount + t2.transactionAmount
+        )
+      )
+      .map { case (category, transaction) =>
+        (category, transaction.transactionAmount)
+      }
 
     result
   }
 
   def printTransactionTotalsByCategory(ds: Dataset[(String, Double)]): Unit = {
+    
     // Collect the dataset to the driver node as an Array
     val categoryTotals = ds.collect()
+    
+    println("Transaction totals by category:")
 
     // Iterate through the array and print each category and its total
     categoryTotals.foreach { case (category, total) =>
