@@ -56,7 +56,9 @@ object SparkSQLApplication {
   }
 
   def printTransactionTotalsByCategory(df: DataFrame): Unit = {
-    println("Transaction totals by category:")
+    
+    // println("Transaction totals by category:")
+    
     df.collect().foreach { row =>
       val category = row.getAs[String]("category")
       val totalAmount =
